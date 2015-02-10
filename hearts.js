@@ -102,7 +102,7 @@ function Heart(index) {
   };
 }
 
-var MAX_HEARTS = 20;
+var MAX_HEARTS = 25;
 var N_HEARTS = 6;
 
 var allHearts = [];
