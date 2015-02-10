@@ -1,7 +1,4 @@
-// Heart class
 function Heart(index) {
-  //var $ = jQuery;
-  // Construction
   if (index != undefined) {
     this.index = index;
   }
@@ -77,7 +74,6 @@ function Heart(index) {
 
   this.Hide = function() {
     this.show = false;
-    console.log("Called");
     this.$heart.css({
       'display': 'none'
     });
@@ -122,12 +118,10 @@ function ShowHeart(id) {
 }
 
 function IsVisible(id) {
-  console.log(document.getElementById('heart' + id).style.visibility);
   return document.getElementById('heart' + id).style.visibility === 'visible';
 }
 
 function IsInvisible(id) {
-  console.log(document.getElementById('heart' + id).style.visibility);
   return document.getElementById('heart' + id).style.visibility === 'hidden';
 }
 
