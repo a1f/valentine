@@ -1,3 +1,5 @@
+var RAW_GITHUB_PREFIX = 'https://raw.githubusercontent.com/alexfetisov/valentine/master/img';
+
 function Heart(index) {
   if (index != undefined) {
     this.index = index;
@@ -10,7 +12,7 @@ function Heart(index) {
     'margin': 0,
     'padding': 0,
     'border': 0,
-    'background-image': 'url("img/h' + ((index % N_HEARTS) + 1) + '.png")',
+    'background-image': 'url("' + RAW_GITHUB_PREFIX + '/h' + ((index % N_HEARTS) + 1) + '.png")',
     'width': '100px',
     'height': '120px',
     'background-repeat': 'no-repeat',
