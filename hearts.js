@@ -114,9 +114,11 @@ function HideHeart(id) {
 }
 
 function ShowHeart(id) {
+  var index = Math.floor(Math.random() * N_HEARTS) + 1;
   $('#heart' + id).css({
-    'visibility': 'visible'
-  })
+    'visibility': 'visible',
+    'background-image': 'url("' + RAW_GITHUB_PREFIX + '/h' + index + '.png")'
+  });
 }
 
 function IsVisible(id) {
@@ -127,12 +129,31 @@ function IsInvisible(id) {
   return document.getElementById('heart' + id).style.visibility === 'hidden';
 }
 
+function InitHeart(id) {
+  ShowHeart(id);
+  allHearts[id].SetRandomPosition();
+  // Set up rotation
+  setInterval(function() {
+    allHearts[id].RotateRight();
+    setTimeout(function() {
+      allHearts[id].RotateLeft();
+    }, 4000);
+  }, 8000);
+  // Set up moves
+  setInterval(function() {
+    allHearts[id].SetRandomPosition();        
+  }, 5000);
+  allHearts[id].Show();
+  allHearts[id].RotateLeft();
+}
+
 function StartHearts() {
   for (var i = 0; i < MAX_HEARTS; ++i) {
     allHearts[i] = new Heart(i);   
     allHearts[i].AppendToBody();
   }
-
+  var id = Math.floor(Math.random() * MAX_HEARTS);
+  InitHeart(id);
   setInterval(function() {
     var id = Math.floor(Math.random() * MAX_HEARTS);
     if (IsInvisible(id)) {
@@ -140,23 +161,9 @@ function StartHearts() {
     } else if (IsVisible(id)) {
       HideHeart(id);
     } else {
-      ShowHeart(id);
-      allHearts[id].SetRandomPosition();
-      // Set up rotation
-      setInterval(function() {
-        allHearts[id].RotateRight();
-        setTimeout(function() {
-          allHearts[id].RotateLeft();
-        }, 4000);
-      }, 8000);
-      // Set up moves
-      setInterval(function() {
-        allHearts[id].SetRandomPosition();        
-      }, 5000);
-      allHearts[id].Show();
-      allHearts[id].RotateLeft();
+      InitHeart(id);
     }
-  }, 5000);
+  }, 4000);
   
 }
 
