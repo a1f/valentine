@@ -30,29 +30,35 @@ function Heart(index) {
   };
 
   this.AdjustX = function(x) {
-    var screenWidth = $(window).width();
+    var shift = $(window).scrollLeft();
+    var screenWidth = window.innerWidth;
     var oneFourOfWidth = screenWidth / 4;
     // Check if it goes out of screen
     if (x < oneFourOfWidth) {
       x = screenWidth - x;
     }
-    var right_most = $(window).width() - this.$heart.width() - 20;
+    if (x < 100) {
+      x = 100;
+    }
+    var right_most = screenWidth - this.$heart.width() - 20;
     if (x > right_most) {
       x = right_most;
     }
+    x += shift;
     return x;
   };
 
   this.AdjustY = function(y) {
-    if (y < 100) {
-      y = 100;
-    }
-
-    var bottom_most = $(window).height() - this.$heart.height() - 20;
+    var shift = $(window).scrollTop();
+    var screenHeight = window.innerHeight;
+    var bottom_most = screenHeight - this.$heart.height() - 20;
     if (y > bottom_most) {
       y = bottom_most;
     }
-   
+    if (y < 100) {
+      y = 100;
+    }
+    y += shift;
     return y;
   };
 
@@ -113,7 +119,20 @@ function HideHeart(id) {
   })
 }
 
+function CanShow() {
+  var viewPortWidth = window.innerWidth;
+  var viewPortHeight = window.innerHeight;
+  if (viewPortHeight < 500 || viewPortWidth < 500) {
+    return false;
+  }
+  return true;
+}
+
 function ShowHeart(id) {
+  if (!CanShow()) {
+    HideHeart();
+    return;
+  }
   var index = Math.floor(Math.random() * N_HEARTS) + 1;
   $('#heart' + id).css({
     'visibility': 'visible',
@@ -131,6 +150,7 @@ function IsInvisible(id) {
 
 function InitHeart(id) {
   ShowHeart(id);
+  if (!CanShow()) return;
   allHearts[id].SetRandomPosition();
   // Set up rotation
   setInterval(function() {
@@ -164,9 +184,36 @@ function StartHearts() {
       InitHeart(id);
     }
   }, 4000);
-  
+}
+
+function MoveOneHeartToViewport() {
+  var moved = false;
+  for (var i = 0; i < MAX_HEARTS; ++i) {
+    if (IsVisible(i)) {
+      allHearts[i].SetRandmonPosition();
+      moved = true;
+    }
+  }
+  if (!moved) {
+    InitHeart(0);
+  }
+}
+
+function CheckCanShow() {
+  if (CanShow()) return;
+  for (var i = 0; i < MAX_HEARTS; ++i) {
+    if (IsVisible(i)) {
+      HideHeart(i);
+    }
+  }
 }
 
 $(document).ready(function() {
   StartHearts();
+  $(window).resize(function() {
+    CheckCanShow();
+  })
+  $(window).scroll(function() {
+    MoveOneHeartToViewport();
+  });
 });
